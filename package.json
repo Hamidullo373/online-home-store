@@ -1,0 +1,23 @@
+{
+  "name": "home_buy",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js",
+    "start:dev": "nodemon src/main.js"
+  },
+  "keywords": [],
+  "author": "Hamidullo Pardayev",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.13.0",
+    "path-to-regexp": "^8.2.0"
+  }
+}
