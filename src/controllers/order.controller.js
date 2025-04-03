@@ -2,7 +2,7 @@ import Order from "../models/order.model.js";
 
 const getOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("userId orderItems.homesId");
+    const orders = await Order.find().populate("userId orderItems.clothesId");
     res.status(200).json({ message: "Succes", orders });
   } catch (err) {
     console.log(err.message);
@@ -14,7 +14,7 @@ const getOrders = async (req, res) => {
 const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
-      "userId orderItems.homesId"
+      "userId orderItems.clothesId"
     );
     if (!order) return res.status(404).json({ message: "Order not found" });
 
@@ -26,8 +26,6 @@ const getOrderById = async (req, res) => {
 
 const createOrder = async (req, res) => {
   try {
-    console.log("Request body:", req.body);
-
     const { userId, orderItems, total_price } = req.body;
 
     if (!userId || !orderItems.length || !total_price) {

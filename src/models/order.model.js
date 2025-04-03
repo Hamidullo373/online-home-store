@@ -17,9 +17,9 @@ const OrderSchema = new mongoose.Schema(
     },
     orderItems: [
       {
-        homesId: {
+        clothesId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Homes",
+          ref: "Clothes",
           required: true,
         },
         count: {
