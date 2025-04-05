@@ -7,19 +7,15 @@ const OrderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    total_price: {
-      type: Number,
-      required: true,
-    },
     created_at: {
       type: Date,
       default: Date.now,
     },
     orderItems: [
       {
-        clothesId: {
+        homesId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Clothes",
+          ref: "Homes",
           required: true,
         },
         count: {

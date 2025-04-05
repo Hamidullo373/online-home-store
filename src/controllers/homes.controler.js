@@ -1,8 +1,9 @@
 import { isValidObjectId } from "mongoose";
 import categoryModel from "../models/category.model.js";
 import homesModel from "../models/homes.model.js";
+import { BaseException } from "../exception/base.exseption.js";
 
-const getAllHomes = async (req, res) => {
+const getAllHomes = async (req, res, next) => {
   try {
     const homes = await homesModel
       .find()
@@ -15,32 +16,25 @@ const getAllHomes = async (req, res) => {
       data: homes,
     });
   } catch (error) {
-    res.status(500).send({
-      message: "Error while fetching homes",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getOneHomes = async (req, res) => {
-  const { id } = req.params;
-
+const getOneHomes = async (req, res, next) => {
   try {
+    const { id } = req.params;
+
     if (!isValidObjectId(id)) {
-      return res.status(400).send({
-        message: `Given ID: ${id} is not a valid Object ID`,
-      });
+      throw new BaseException(`Given ID: ${id} is not valid Object ID`, 400);
     }
 
-    const Homes = await homesModel
+    const homes = await homesModel
       .findById(id)
       .populate("category", "-homes -createdAt -updatedAt")
       .select(["-createdAt", "-updatedAt"]);
 
     if (!homes) {
-      return res.status(404).send({
-        message: "Homes not found",
-      });
+      throw new BaseException("Homes not found", 404);
     }
 
     res.send({
@@ -48,23 +42,17 @@ const getOneHomes = async (req, res) => {
       data: homes,
     });
   } catch (error) {
-    res.status(500).send({
-      message: "Error while fetching the Homes",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const createHomes = async (req, res) => {
-  const { name, price, category, description, imageUrl } = req.body;
-
+const createHomes = async (req, res, next) => {
   try {
-    const foundedCategory = await categoryModel.findById(category);
+    const { name, price, category, description, imageUrl, size } = req.body;
 
+    const foundedCategory = await categoryModel.findById(category);
     if (!foundedCategory) {
-      return res.status(404).send({
-        message: `Category with ID: ${category} not found`,
-      });
+      throw new BaseException(`Category with ID: ${category} not found`, 400);
     }
 
     const homes = await homesModel.create({
@@ -73,54 +61,40 @@ const createHomes = async (req, res) => {
       category,
       description,
       imageUrl,
+      size,
     });
 
     await categoryModel.updateOne(
       { _id: category },
-      {
-        $push: {
-          homes: homes._id,
-        },
-      }
+      { $push: { homes: homes._id } }
     );
 
     res.status(201).send({
-      message: "Homes created successfully",
+      message: "success",
       data: homes,
     });
   } catch (error) {
-    res.status(500).send({
-      message: "Error while creating homes",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const updateHomes = async (req, res) => {
-  const { id } = req.params;
-  const { name, description, price } = req.body;
-
+const updateHomes = async (req, res, next) => {
   try {
+    const { id } = req.params;
+    const { name, description, price, size } = req.body;
+
     if (!isValidObjectId(id)) {
-      return res.status(400).send({
-        message: `Given ID: ${id} is not a valid Object ID`,
-      });
+      throw new BaseException(`Given ID: ${id} is not valid Object ID`, 400);
     }
 
     const homes = await homesModel.findByIdAndUpdate(
       id,
-      {
-        name,
-        description,
-        price,
-      },
+      { name, description, price, size },
       { new: true }
     );
 
     if (!homes) {
-      return res.status(404).send({
-        message: "Homes not found",
-      });
+      throw new BaseException("Homes not found", 404);
     }
 
     res.send({
@@ -128,39 +102,29 @@ const updateHomes = async (req, res) => {
       data: homes,
     });
   } catch (error) {
-    res.status(500).send({
-      message: "Error while updating homes",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteHomes = async (req, res) => {
-  const { id } = req.params;
-
+const deleteHomes = async (req, res, next) => {
   try {
+    const { id } = req.params;
+
     if (!isValidObjectId(id)) {
-      return res.status(400).send({
-        message: `Given ID: ${id} is not a valid Object ID`,
-      });
+      throw new BaseException(`Given ID: ${id} is not valid Object ID`, 400);
     }
 
     const result = await homesModel.deleteOne({ _id: id });
 
     if (result.deletedCount === 0) {
-      return res.status(404).send({
-        message: "Homes not found",
-      });
+      throw new BaseException("Homes not found", 404);
     }
 
-    res.status(204).send({
-      message: "Homes deleted successfully",
-    });
+    await categoryModel.updateOne({ homes: id }, { $pull: { homes: id } });
+
+    res.status(204).send();
   } catch (error) {
-    res.status(500).send({
-      message: "Error while deleting homes",
-      error: error.message,
-    });
+    next(error);
   }
 };
 

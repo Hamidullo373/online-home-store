@@ -6,24 +6,37 @@ import {
   updateHomesSchema,
 } from "../schema/homes.schema.js";
 import { authenticate } from "../middleware/auth.middleware.js";
+import { Protected } from "../middleware/protected.middleware.js";
+import { Roles } from "../middleware/roles.middleware.js";
+import { ROLES } from "../constants/role.constants.js";
 
 const homesRouter = Router();
 
 homesRouter
-  .get("/", homesController.getAllHomes)
-  .get("/:id", homesController.getOneHomes)
+  .get("/", Protected(false), Roles(ROLES.ALL), homesController.getAllHomes)
+  .get("/:id", Protected(false), Roles(ROLES.ALL), homesController.getOneHomes)
   .post(
     "/",
+    Protected(true),
     authenticate,
+    Roles(ROLES.ALL),
     ValidationMiddleware(createHomesSchema),
     homesController.createHomes
   )
   .patch(
     "/:id",
+    Protected(true),
     authenticate,
+    Roles(ROLES.STORE_OWNER, ROLES.SUPER_ADMIN),
     ValidationMiddleware(updateHomesSchema),
     homesController.updateHomes
   )
-  .delete("/:id", authenticate, homesController.deleteHomes);
+  .delete(
+    "/:id",
+    Protected(true),
+    Roles(ROLES.STORE_OWNER, ROLES.SUPER_ADMIN),
+    authenticate,
+    homesController.deleteHomes
+  );
 
 export default homesRouter;
