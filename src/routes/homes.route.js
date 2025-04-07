@@ -9,6 +9,7 @@ import { authenticate } from "../middleware/auth.middleware.js";
 import { Protected } from "../middleware/protected.middleware.js";
 import { Roles } from "../middleware/roles.middleware.js";
 import { ROLES } from "../constants/role.constants.js";
+import upload from "../config/multer.config.js";
 
 const homesRouter = Router();
 
@@ -20,6 +21,7 @@ homesRouter
     Protected(true),
     authenticate,
     Roles(ROLES.ALL),
+    upload.single("imageUrl"),
     ValidationMiddleware(createHomesSchema),
     homesController.createHomes
   )

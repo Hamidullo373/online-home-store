@@ -6,8 +6,8 @@ const userSchema = new Schema(
     name: {
       type: String,
       required: true,
-      minlength: 3,
-      maxlength: 50,
+      minlength: 4,
+      maxlength: 30,
     },
     phoneNumber: {
       type: String,
@@ -23,12 +23,23 @@ const userSchema = new Schema(
     },
     gender: {
       type: String,
-      enum: ["male", "female"],
+      enum: ["erkak", "ayol"],
       required: true,
     },
     birthDate: {
       type: Date,
       required: true,
+    },
+    role: {
+      type: String,
+      enum: [ROLES.VIEWER, ROLES.RESTAURANT_OWNER, ROLES.SUPER_ADMIN],
+      default: ROLES.VIEWER,
+    },
+    email: {
+      type: mongoose.SchemaTypes.String,
+      required: true,
+      unique: true,
+      match: /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim,
     },
   },
   {

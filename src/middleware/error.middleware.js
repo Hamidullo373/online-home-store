@@ -1,7 +1,11 @@
-export const errorHandler = (err, req, res, next) => {
-  console.error(err);
+export const ErrorHandlerMiddleware = (err, _, res, __) => {
+  if (err.isException) {
+    return res.status(err.status).send({
+      message: err.message,
+    });
+  }
+  console.log(err);
   res.status(500).send({
-    message: "Something went wrong",
-    error: err.message,
+    message: "Error Server Error",
   });
 };
