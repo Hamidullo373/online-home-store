@@ -1,0 +1,22 @@
+<div class="gucci-card">
+  <h1><%= categoryName %> Kategoriya tafsiloti</h1>
+  <p>
+    <strong class="form-label">Nomi:</strong>
+    <span><%= categoryName %></span>
+  </p>
+
+  <h3>Subkategoriyalar:</h3>
+  <% if (subcategories.length > 0) { %>
+  <ul class="list-group mb-4">
+    <% subcategories.forEach(subcategory => { %>
+    <li class="list-group-item">
+      <a href="/?category=<%= subcategory.id %>"> <%= subcategory.name %> </a>
+    </li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+  <p>Subkategoriyalar mavjud emas.</p>
+  <% } %>
+
+  <a href="/categories" class="btn-gucci">⬅ Orqaga</a>
+</div>

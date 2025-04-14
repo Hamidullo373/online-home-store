@@ -1,8 +1,7 @@
 import { BaseException } from "../exception/base.exseption.js";
 import Order from "../models/order.model.js";
-import Homes from "../models/homes.model.js";
+import Clothes from "../models/homes.model.js";
 
-// Controllers
 const getOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
@@ -70,7 +69,6 @@ const createOrder = async (req, res, next) => {
       throw new BaseException(`Some homes items were not found`);
     }
 
-    // Total_price ni hisoblash
     const total_price = orderItems.reduce((sum, item) => {
       const home = homes.find((c) => c._id.toString() === item.homesId);
       return sum + home.price * item.count;
@@ -95,7 +93,6 @@ const updateOrder = async (req, res, next) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Agar orderItems yangilansa, total_price ni qayta hisoblash
     if (updateData.orderItems) {
       const homesIds = updateData.orderItems.map((item) => item.homesId);
       const homes = await Homes.find({ _id: { $in: homesIds } });
@@ -105,7 +102,7 @@ const updateOrder = async (req, res, next) => {
       }
 
       updateData.total_price = updateData.orderItems.reduce((sum, item) => {
-        const home = clothes.find((c) => c._id.toString() === item.homesId);
+        const home = homes.find((c) => c._id.toString() === item.homesId);
         return sum + home.price * item.count;
       }, 0);
     }

@@ -48,12 +48,14 @@ const getOneHomes = async (req, res, next) => {
 
 const createHomes = async (req, res, next) => {
   try {
-    const { name, price, category, description, imageUrl, size } = req.body;
+    const { name, price, category, description, size } = req.body;
 
     const foundedCategory = await categoryModel.findById(category);
     if (!foundedCategory) {
       throw new BaseException(`Category with ID: ${category} not found`, 400);
     }
+
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     const homes = await homesModel.create({
       name,

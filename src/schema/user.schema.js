@@ -1,33 +1,26 @@
 import Joi from "joi";
 
-export const registerUserSchema = Joi.object({
-  name: Joi.string().min(3).max(50).required(),
-  password: Joi.string().min(8).required(),
+export const registerSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
   phoneNumber: Joi.string()
+    .min(9)
+    .max(9)
     .pattern(
       /^\d+$/
-      // /^(9[012345789]|6[125679]|7[01234569]|3[3]|8[8]|2[0]|5[05])[0-9]{7}$/
+      // /^(9[012345789]|6[125679]|7[0123456789]|3[3]|8[8]|2[0]|5[05])[0-9]{7}$/
     )
     .required(),
+  birthDate: Joi.date().iso().optional(),
   gender: Joi.string().valid("male", "female").required(),
-  birthDate: Joi.date().less("now").required(),
-});
+}).required();
 
-export const loginUserSchema = Joi.object({
-  phoneNumber: Joi.string()
-    .pattern(
-      /^\d+$/
-      // /^(9[012345789]|6[125679]|7[01234569]|3[3]|8[8]|2[0]|5[05])[0-9]{7}$/
-    )
-    .required(),
-  password: Joi.string().min(8).required(),
-});
+export const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+}).required();
 
-export const updateUserSchema = Joi.object({
-  username: Joi.string().min(3).max(50),
-  phoneNumber: Joi.string().pattern(
-    /^\d+$/
-    // /^(9[012345789]|6[125679]|7[01234569]|3[3]|8[8]|2[0]|5[05])[0-9]{7}$/
-  ),
-  password: Joi.string().min(8),
-});
+export const refreshSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+}).required();

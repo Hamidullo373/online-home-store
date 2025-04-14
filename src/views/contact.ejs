@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <title><%= title || 'Villa Agency - Real Estate' %></title>
+
+    <!-- CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/fontawesome.css" />
+    <link rel="stylesheet" href="/assets/css/templatemo-villa-agency.css" />
+    <link rel="stylesheet" href="/assets/css/owl.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  </head>
+
+  <body>
+    <!-- Preloader -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-header -->
+    <div class="sub-header">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-8">
+            <ul class="info">
+              <li><i class="fa fa-envelope"></i> info@company.com</li>
+              <li><i class="fa fa-map"></i> Sunny Isles Beach, FL 33160</li>
+            </ul>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <ul class="social-links">
+              <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+              <li><a href="https://x.com/minthu" target="_blank"><i class="fab fa-twitter"></i></a></li>
+              <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+              <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header-area header-sticky">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav class="main-nav">
+              <a href="/" class="logo"><h1>Villa</h1></a>
+              <ul class="nav">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/properties">Properties</a></li>
+                <li><a href="/property-details">Property Details</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="#"><i class="fa fa-calendar"></i> Schedule a visit</a></li>
+              </ul>
+              <a class="menu-trigger"><span>Menu</span></a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Banner -->
+    <div class="main-banner">
+      <div class="owl-carousel owl-banner">
+        <div class="item item-1">
+          <div class="header-text">
+            <span class="category">Toronto, <em>Canada</em></span>
+            <h2>Hurry!<br />Get the Best Villa for you</h2>
+          </div>
+        </div>
+        <div class="item item-2">
+          <div class="header-text">
+            <span class="category">Melbourne, <em>Australia</em></span>
+            <h2>Be Quick!<br />Get the best villa in town</h2>
+          </div>
+        </div>
+        <div class="item item-3">
+          <div class="header-text">
+            <span class="category">Miami, <em>South Florida</em></span>
+            <h2>Act Now!<br />Get the highest level penthouse</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="villa" role="tabpanel" aria-labelledby="villa-tab">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="info-table">
+        <ul>
+          <li>Total Flat Space <span><%= villa.totalFlatSpace %> m2</span></li>
+          <li>Floor number <span><%= villa.floorNumber %></span></li>
+          <li>Number of rooms <span><%= villa.numberOfRooms %></span></li>
+          <li>Parking Available <span><%= villa.parkingAvailable %></span></li>
+          <li>Payment Process <span><%= villa.paymentProcess %></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <img src="<%= villa.image %>" alt="">
+    </div>
+    <div class="col-lg-3">
+      <h4>Detail Info About Villa</h4>
+      <p><%= villa.detailInfo %></p>
+      <div class="icon-button">
+        <a href="<%= villa.detailsLink %>"><i class="fa fa-calendar"></i> Schedule a visit</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-pane fade" id="penthouse" role="tabpanel" aria-labelledby="penthouse-tab">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="info-table">
+        <ul>
+          <li>Total Flat Space <span><%= penthouse.totalFlatSpace %> m2</span></li>
+          <li>Floor number <span><%= penthouse.floorNumber %></span></li>
+          <li>Number of rooms <span><%= penthouse.numberOfRooms %></span></li>
+          <li>Parking Available <span><%= penthouse.parkingAvailable %></span></li>
+          <li>Payment Process <span><%= penthouse.paymentProcess %></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <img src="<%= penthouse.image %>" alt="">
+    </div>
+    <div class="col-lg-3">
+      <h4>Extra Info About Penthouse</h4>
+      <p><%= penthouse.detailInfo %></p>
+      <div class="icon-button">
+        <a href="<%= penthouse.detailsLink %>"><i class="fa fa-calendar"></i> Schedule a visit</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="properties section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 offset-lg-4">
+        <div class="section-heading text-center">
+          <h6>| Properties</h6>
+          <h2>We Provide The Best Property You Like</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <% properties.forEach(function(property) { %>
+      <div class="col-lg-4 col-md-6">
+        <div class="item">
+          <a href="<%= property.detailsLink %>"><img src="<%= property.image %>" alt=""></a>
+          <span class="category"><%= property.category %></span>
+          <h6><%= property.price %></h6>
+          <h4><a href="<%= property.detailsLink %>"><%= property.address %></a></h4>
+          <ul>
+            <li>Bedrooms: <span><%= property.bedrooms %></span></li>
+            <li>Bathrooms: <span><%= property.bathrooms %></span></li>
+            <li>Area: <span><%= property.area %>m2</span></li>
+            <li>Floor: <span><%= property.floor %></span></li>
+            <li>Parking: <span><%= property.parking %> spots</span></li>
+          </ul>
+          <div class="main-button">
+            <a href="<%= property.detailsLink %>">Schedule a visit</a>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
+<div class="contact section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 offset-lg-4">
+        <div class="section-heading text-center">
+          <h6>| Contact Us</h6>
+          <h2>Get In Touch With Our Agents</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="contact-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <div id="map">
+          <iframe src="<%= contact.mapLink %>" width="100%" height="500px" frameborder="0" style="border:0; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);" allowfullscreen=""></iframe>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="item phone">
+              <img src="assets/images/phone-icon.png" alt="" style="max-width: 52px;">
+              <h6><%= contact.phone %><br><span>Phone Number</span></h6>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="item email">
+              <img src="assets/images/email-icon.png" alt="" style="max-width: 52px;">
+              <h6><%= contact.email %><br><span>Business Email</span></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <form id="contact-form" action="" method="post">
+          <div class="row">
+            <div class="col-lg-12">
+              <fieldset>
+                <label for="name">Full Name</label>
+                <input type="name" name="name" id="name" placeholder="Your Name..." autocomplete="on" required>
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <label for="email">Email Address</label>
+                <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your E-mail..." required="">
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <label for="subject">Subject</label>
+                <input type="subject" name="subject" id="subject" placeholder="Subject..." autocomplete="on" >
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <label for="message">Message</label>
+                <textarea name="message" id="message" placeholder="Your Message"></textarea>
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <button type="submit" id="form-submit" class="orange-button">Send Message</button>
+              </fieldset>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="col-lg-8">
+      <p>Copyright © 2048 Villa Agency Co., Ltd. All rights reserved.
+      Design: <a rel="nofollow" href="https://templatemo.com" target="_blank">TemplateMo</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/counter.js"></script>
+<script src="assets/js/custom.js"></script>
+</body>
+</html>
+
