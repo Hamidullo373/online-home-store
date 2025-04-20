@@ -85,10 +85,10 @@
               <!-- ***** Logo End ***** -->
               <!-- ***** Menu Start ***** -->
               <ul class="nav">
-                <li><a href="home.ejs">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li><a href="properties.ejs" class="active">Properties</a></li>
-                <li><a href="property-details.ejs">Property Details</a></li>
-                <li><a href="contact.ejs">Contact Us</a></li>
+                <!-- <li><a href="property-details.ejs">Property Details</a></li> -->
+                <li><a href="contact">Contact Us</a></li>
                 <li>
                   <a href="#"
                     ><i class="fa fa-calendar"></i> Schedule a visit</a
@@ -120,32 +120,24 @@
     <div class="section properties">
       <div class="container">
         <ul class="properties-filter">
-          <li>
-            <a class="is_active" href="#!" data-filter="*">Show All</a>
-          </li>
-          <li>
-            <a href="#!" data-filter=".adv">Apartment</a>
-          </li>
-          <li>
-            <a href="#!" data-filter=".str">Villa House</a>
-          </li>
-          <li>
-            <a href="#!" data-filter=".rac">Penthouse</a>
-          </li>
+          <li><a class="is_active" href="#!" data-filter="*">Show All</a></li>
+          <li><a href="#!" data-filter=".adv">Apartment</a></li>
+          <li><a href="#!" data-filter=".str">Villa House</a></li>
+          <li><a href="#!" data-filter=".rac">Penthouse</a></li>
         </ul>
         <div class="row properties-box">
           <% properties.forEach(property => { %>
           <div
-            class="col-lg-4 col-md-6 align-self-center mb-30 properties-items <%= property.category %>"
+            class="col-lg-4 col-md-6 align-self-center mb-30 properties-items <%= property.categoryClass %>"
           >
             <div class="item">
-              <a href="property-details.html"
-                ><img src="assets/images/property-01.jpg" alt=""
-              /></a>
+              <a href="property-details.ejs">
+                <img src="assets/images/property-01.jpg" alt="" />
+              </a>
               <span class="category"><%= property.category %></span>
               <h6><%= property.price %></h6>
               <h4>
-                <a href="property-details.html"><%= property.address %></a>
+                <a href="property-details.ejs"><%= property.address %></a>
               </h4>
               <ul>
                 <li>Bedrooms: <span><%= property.bedrooms %></span></li>
@@ -155,7 +147,7 @@
                 <li>Parking: <span><%= property.parking %> spots</span></li>
               </ul>
               <div class="main-button">
-                <a href="property-details.html">Schedule a visit</a>
+                <a href="property-details.ejs">Schedule a visit</a>
               </div>
             </div>
           </div>
@@ -188,7 +180,6 @@
     </footer>
 
     <!-- Scripts -->
-    <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/isotope.min.js"></script>
@@ -197,3 +188,23 @@
     <script src="assets/js/custom.js"></script>
   </body>
 </html>
+
+<!-- <script>
+      $(document).ready(function () {
+        // Isotope grid init
+        var $grid = $(".properties-box").isotope({
+          itemSelector: ".properties-items",
+          layoutMode: "fitRows",
+        });
+
+        // Filter functionality
+        $(".properties-filter").on("click", "a", function () {
+          var filterValue = $(this).attr("data-filter");
+          $grid.isotope({ filter: filterValue });
+
+          // Update the active class
+          $(".properties-filter a").removeClass("is_active");
+          $(this).addClass("is_active");
+        });
+      });
+    </script> -->

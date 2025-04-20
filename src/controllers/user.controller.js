@@ -53,24 +53,21 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Foydalanuvchini topish
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.render("auth/login", { error: "Foydalanuvchi topilmadi" });
     }
 
-    // Parolni tekshirish
     const isMatch = await compare(password, user.password);
     if (!isMatch) {
       return res.render("auth/login", { error: "Noto'g'ri parol" });
     }
 
-    // Tokenlar yaratish
     const accessToken = jwt.sign(
       { id: user.id, role: user.role },
       ACCESS_TOKEN_SECRET,
       {
-        expiresIn: ACCESS_TOKEN_EXPIRE_TIME,
+        expiresIn: +ACCESS_TOKEN_EXPIRE_TIME,
         algorithm: "HS256",
       }
     );
@@ -79,80 +76,28 @@ const login = async (req, res, next) => {
       { id: user.id, role: user.role },
       REFRESH_TOKEN_SECRET,
       {
-        expiresIn: REFRESH_TOKEN_EXPIRE_TIME,
+        expiresIn: +REFRESH_TOKEN_EXPIRE_TIME,
         algorithm: "HS256",
       }
     );
 
-    // Cookies saqlash
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      maxAge: +ACCESS_TOKEN_EXPIRE_TIME * 1000, // milisekundlarda
+      maxAge: +ACCESS_TOKEN_EXPIRE_TIME * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: +REFRESH_TOKEN_EXPIRE_TIME * 1000, // milisekundlarda
+      maxAge: +REFRESH_TOKEN_EXPIRE_TIME * 1000,
     });
 
     res.cookie("user", JSON.stringify(user));
 
-    // Foydalanuvchini tizimga kirganidan so'ng bosh sahifaga yo'naltirish
     return res.redirect("/");
   } catch (error) {
-    next(error); // Xatoliklarni next() bilan yuborish
+    next(error);
   }
 };
-
-// const login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     const user = await userModel.findOne({ email });
-//     if (!user) {
-//       return res.render("auth/login", { error: "Foydalanuvchi topilmadi" });
-//     }
-
-//     const isMatch = await compare(password, user.password);
-//     if (!isMatch) {
-//       return res.render("auth/login", { error: "Noto'g'ri parol" });
-//     }
-
-//     const accessToken = jwt.sign(
-//       { id: user.id, role: user.role },
-//       ACCESS_TOKEN_SECRET,
-//       {
-//         expiresIn: +ACCESS_TOKEN_EXPIRE_TIME,
-//         algorithm: "HS256",
-//       }
-//     );
-
-//     const refreshToken = jwt.sign(
-//       { id: user.id, role: user.role },
-//       REFRESH_TOKEN_SECRET,
-//       {
-//         expiresIn: +REFRESH_TOKEN_EXPIRE_TIME,
-//         algorithm: "HS256",
-//       }
-//     );
-
-//     res.cookie("accessToken", accessToken, {
-//       httpOnly: true,
-//       maxAge: +ACCESS_TOKEN_EXPIRE_TIME * 1000,
-//     });
-
-//     res.cookie("refreshToken", refreshToken, {
-//       httpOnly: true,
-//       maxAge: +REFRESH_TOKEN_EXPIRE_TIME * 1000,
-//     });
-
-//     res.cookie("user", JSON.stringify(user));
-
-//     return res.redirect("/");
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 const forgotPassword = async (req, res, next) => {
   try {

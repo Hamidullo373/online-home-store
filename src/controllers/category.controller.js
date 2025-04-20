@@ -5,7 +5,6 @@ const getAllCategories = async (req, res) => {
   const { limit, page, sortField = "createdAt", sortOrder = "asc" } = req.query;
   const categories = await categoryModel
     .find({ categoryId: null })
-    .populate("children")
     .skip((page - 1) * limit)
     .limit(limit)
     .sort([[sortField, sortOrder]]);

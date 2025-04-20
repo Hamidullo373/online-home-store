@@ -48,7 +48,7 @@ const getOneHomes = async (req, res, next) => {
 
 const createHomes = async (req, res, next) => {
   try {
-    const { name, price, category, description, size } = req.body;
+    const { name, price, location, category, description } = req.body;
 
     const foundedCategory = await categoryModel.findById(category);
     if (!foundedCategory) {
@@ -60,10 +60,10 @@ const createHomes = async (req, res, next) => {
     const homes = await homesModel.create({
       name,
       price,
+      location,
       category,
       description,
       imageUrl,
-      size,
     });
 
     await categoryModel.updateOne(
@@ -83,7 +83,7 @@ const createHomes = async (req, res, next) => {
 const updateHomes = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, description, price, size } = req.body;
+    const { name, description, price, location } = req.body;
 
     if (!isValidObjectId(id)) {
       throw new BaseException(`Given ID: ${id} is not valid Object ID`, 400);
@@ -91,7 +91,7 @@ const updateHomes = async (req, res, next) => {
 
     const homes = await homesModel.findByIdAndUpdate(
       id,
-      { name, description, price, size },
+      { name, description, price, location },
       { new: true }
     );
 

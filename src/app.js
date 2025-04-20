@@ -1,6 +1,7 @@
 import express from "express";
 import route from "./routes/index.js";
 import { config } from "dotenv";
+import session from "express-session";
 
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -36,6 +37,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cookieParser("cookie-secret"));
 
+app.use("/api", route);
+app.use("/", pageRouter);
 app.use("/", pageRouter);
 app.use("/", route);
 

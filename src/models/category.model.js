@@ -12,7 +12,7 @@ const categorySchema = new mongoose.Schema(
       ref: "Category",
       default: null,
     },
-    children: {
+    homes: {
       type: mongoose.Schema.Types.Array,
       ref: "Category",
     },

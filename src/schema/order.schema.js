@@ -23,5 +23,5 @@ export const updateOrderSchema = Joi.object({
     })
   ),
   total_price: Joi.number().positive(),
-  status: Joi.string().valid("pending", "shipped", "delivered", "cancelled"),
+  status: Joi.string().valid("pending", "sold", "cancelled"),
 });

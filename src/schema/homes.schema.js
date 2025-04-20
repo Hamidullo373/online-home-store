@@ -6,7 +6,7 @@ export const createHomesSchema = Joi.object({
   description: Joi.string().max(500),
   imageUrl: Joi.string().uri(),
   category: Joi.string().required(),
-  stock: Joi.number().integer().min(0).required(),
+  location: Joi.string().min(3).max(100).required(),
 });
 
 export const updateHomesSchema = Joi.object({
@@ -15,5 +15,5 @@ export const updateHomesSchema = Joi.object({
   description: Joi.string().max(500),
   imageUrl: Joi.string().uri(),
   category: Joi.string(),
-  stock: Joi.number().integer().min(0),
+  location: Joi.string().min(3).max(100).required(),
 });

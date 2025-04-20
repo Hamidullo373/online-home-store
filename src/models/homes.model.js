@@ -3,7 +3,7 @@ import { ROLES } from "../constants/role.constants.js";
 
 const { Schema, SchemaTypes } = mongoose;
 
-const homesSchema = new Schema(
+const HomesSchema = new Schema(
   {
     name: {
       type: String,
@@ -15,7 +15,13 @@ const homesSchema = new Schema(
     price: {
       type: Number,
       required: [true, "Uy narxi berilishi shart"],
-      min: [0, "Narx 0 dan yuqori bo'lishi shart"],
+      min: [0, "Narx manfiy bo'lishi mumkin emas"],
+    },
+    location: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 2,
     },
     description: {
       type: String,
@@ -31,27 +37,6 @@ const homesSchema = new Schema(
       type: SchemaTypes.ObjectId,
       ref: "Category",
       required: true,
-    },
-    sizes: [
-      {
-        type: String,
-        enum: ["XS", "S", "M", "L", "XL", "XXL"],
-      },
-    ],
-    area: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    stock: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    isPublished: {
-      type: Boolean,
-      default: false,
     },
 
     role: {
@@ -73,4 +58,4 @@ const homesSchema = new Schema(
   }
 );
 
-export default mongoose.model("Homes", homesSchema);
+export default mongoose.model("Homes", HomesSchema);

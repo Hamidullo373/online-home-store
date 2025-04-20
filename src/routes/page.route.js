@@ -1,10 +1,10 @@
 import { Router } from "express";
 import orderModel from "../models/order.model.js";
-import categoryModel from "../models/category.model.js";
-import homesModel from "../models/homes.model.js";
+import Category from "../models/category.model.js";
+import { ValidationMiddleware } from "../middleware/validation.middleware.js";
+import { createHomesSchema } from "../schema/homes.schema.js";
+import homesController from "../controllers/homes.controler.js";
 import Order from "../models/order.model.js";
-import Home from "../models/homes.model.js";
-
 const pageRouter = Router();
 
 pageRouter.get("/", (req, res) => {
@@ -82,54 +82,80 @@ pageRouter.get("/properties", (req, res) => {
     instagram: "https://instagram.com/yourprofile",
   };
 
+  // Properties array
   const properties = [
-    { category: "apartment", name: "Luxury Apartment", price: 500000 },
-    { category: "house", name: "Family House", price: 250000 },
-    { category: "condo", name: "City Condo", price: 150000 },
+    {
+      title: "Nice Apartment",
+      category: "Apartment",
+      categoryClass: "adv", // bu filtering uchun ishlatiladi
+      price: 1200,
+    },
+    {
+      title: "Cozy Villa",
+      category: "Villa House",
+      categoryClass: "str",
+      price: 2500,
+    },
+    {
+      title: "Luxury Penthouse",
+      category: "Penthouse",
+      categoryClass: "rac",
+      price: 4000,
+    },
+    // "Luxury Villa" har doim mavjud bo'lsin
+    {
+      title: "Luxury Villa",
+      category: "Luxury Villa",
+      categoryClass: "lux",
+      price: 10000,
+    },
   ];
 
-  // propertyDetails va properties'ni bitta ob'ektga birlashtirib yuboring
-  res.render("properties", { ...propertyDetails, properties });
+  // Filter qo'llanishi
+  const filter = req.query.filter || ""; // Filtrovka bo'sh bo'lsa, barcha ko'rsatiladi
+  let filteredProperties = properties;
+
+  if (filter) {
+    filteredProperties = properties.filter(
+      (property) => property.category.toLowerCase() === filter.toLowerCase()
+    );
+  }
+
+  // propertyDetails va filteredProperties'ni bitta ob'ektga birlashtirib yuboring
+  res.render("properties", {
+    ...propertyDetails,
+    properties: filteredProperties,
+    filter,
+  });
 });
 
-pageRouter.get("/property-details", (req, res) => {
-  // Villa obyektining misol ma'lumotlari
-  const villa = {
-    title: "Luxury Villa in Sunny Isles Beach", // Title qiymatini qo‘shish
-    category: "Residential",
-    address: "123 Sunny Isles Blvd, FL 33160",
-    description: "A beautiful villa with all modern amenities.",
-    totalFlatSpace: 350,
-    contractStatus: "Active",
-    paymentStatus: "Paid",
-    safety: "High",
-    accordions: [
-      {
-        title: "About the Villa",
-        content: "This villa has everything you need for a comfortable living.",
-      },
-      {
-        title: "Neighborhood",
-        content:
-          "Located in a safe and friendly area with excellent amenities.",
-      },
-      {
-        title: "Additional Features",
-        content: "Private pool, gym, and a beautiful garden.",
-      },
-    ],
+pageRouter.get("/property-details", async (req, res) => {
+  // Hozircha test uchun qo‘lda property yozamiz, keyin DB'dan dinamik olamiz
+  const property = {
+    title: "Luxury Villa",
+    price: "$1,200,000",
+    description: "This is a beautiful luxury villa located in Miami.",
+    image: "/assets/images/property-01.jpg",
   };
 
-  // `villa` obyektini va boshqa zarur ma'lumotlarni EJS shabloniga yuborish
-  res.render("property-details", { villa: villa, title: villa.title });
+  res.render("property-details", { property });
+});
+
+pageRouter.get("/contact", (req, res) => {
+  res.render("contact", {
+    email: "info@company.com",
+    address: "1234 Elm Street, Sunny Isles Beach, FL 33160",
+    twitter_url: "https://twitter.com/yourcompany",
+    phone: "+998 90 123 45 67", // 👈 bu yangi qo‘shilgan
+  });
 });
 
 pageRouter.get("/users/login", (req, res) => {
-  res.render("auth/login", { error: null });
+  res.render("auth/login", { error: null, message: null });
 });
 
 pageRouter.get("/users/register", (req, res) => {
-  res.render("auth/register", { error: null });
+  res.render("auth/register", { error: null, message: null });
 });
 
 pageRouter.get("/users/forgot-password", (req, res) => {
@@ -139,7 +165,7 @@ pageRouter.get("/users/forgot-password", (req, res) => {
 pageRouter.get("/users/reset-password", (req, res) => {
   const token = req.query.token;
   if (!token) {
-    res.redirect("/users/login");
+    return res.redirect("/users/login");
   }
   res.render("auth/reset-password", {
     error: null,
@@ -148,20 +174,45 @@ pageRouter.get("/users/reset-password", (req, res) => {
   });
 });
 
+pageRouter.get("/orders/show", async (req, res) => {
+  try {
+    // Foydalanuvchi buyurtmalarini olish
+    const orders = await orderModel
+      .find({ user: req.user._id })
+      .populate("home");
+
+    if (!orders || orders.length === 0) {
+      return res.render("orders/show", {
+        orders: [],
+        message: "Savatda hech qanday buyurtma yo'q.",
+      });
+    }
+
+    // Savatdagi buyurtmalarni ko'rsatish
+    res.render("orders/show", {
+      orders,
+      message: null,
+    });
+  } catch (error) {
+    console.error("Buyurtmalarni olishda xato:", error);
+    res.status(500).render("orders/show", {
+      orders: [],
+      message:
+        "Buyurtmalarni olishda muammo yuz berdi. Iltimos, keyinroq qaytib keling.",
+    });
+  }
+});
+
 pageRouter.get("/categories", (req, res) => {
-  res.render("categories/index");
+  res.render("categories/index", { error: null, message: null });
+});
+
+pageRouter.get("/categories/created", (req, res) => {
+  res.render("categories/create", { error: null, message: null });
 });
 
 pageRouter.get("/categories/show", (req, res) => {
-  res.render("categories/show");
-});
-
-pageRouter.get("/categories/create", (req, res) => {
-  res.render("categories/create");
-});
-
-pageRouter.get("/categories/edit", (req, res) => {
-  res.render("categories/edit");
+  res.render("categories/show", { error: null, message: null });
 });
 
 pageRouter.get("/orders", async (req, res, next) => {
@@ -170,38 +221,6 @@ pageRouter.get("/orders", async (req, res, next) => {
     res.render("orders/index", { orders });
   } catch (error) {
     next(error); // Xatolik bo‘lsa error handler'ga beriladi
-  }
-});
-
-// pageRouter.get("/orders/create", async (req, res, next) => {
-//   res.render("orders/create", { homes });
-// });
-
-pageRouter.get("/orders/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const order = await orderModel.findById(id).populate("items.product");
-    if (!order) {
-      return res.status(404).render("orders/show", {
-        order: null,
-        error: "Buyurtma topilmadi",
-        success: null,
-      });
-    }
-
-    res.render("orders/show", {
-      order,
-      error: null,
-      success: null,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render("orders/show", {
-      order: null,
-      error: "Xatolik yuz berdi",
-      success: null,
-    });
   }
 });
 

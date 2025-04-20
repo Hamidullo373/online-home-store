@@ -11,7 +11,10 @@ export const Roles = (...roles) => {
 
     if (!roles.includes(userRole)) {
       return next(
-        new BaseException("Sizga bu amalni bajarishga ruhsat yo'q", 403)
+        new BaseException(
+          "Kechirasiz sizga bu amalni bajarishga ruhsat yo'q",
+          403
+        )
       );
     }
 
